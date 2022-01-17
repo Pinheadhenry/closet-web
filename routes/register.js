@@ -3,11 +3,11 @@ const router = express.Router()
 const User = require('../models/user')
 const bcyrpt = require('bcrypt')
 
-router.get('/', (req, res) => {
+router.get('/', checkNotAuthenticated, (req, res) => {
     res.render('register')
 })
 
-router.post('/', async (req, res) => {
+router.post('/', checkNotAuthenticated, async (req, res) => {
     try {
         const hashedPassword = await bcyrpt.hash(req.body.password, 10)
         const user = new User({
@@ -24,5 +24,13 @@ router.post('/', async (req, res) => {
     const users = await User.find({})
     console.log(users)
 })
+
+function checkNotAuthenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+        return res.redirect('/')
+    }
+    next() 
+}
+
 
 module.exports = router

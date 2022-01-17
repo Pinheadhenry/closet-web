@@ -9,6 +9,7 @@ const bodyParser = require("body-parser")
 const passport = require('passport')
 const flash = require('express-flash')
 const session = require('express-session')
+const methodOverride = require('method-override')
 
 
 const indexRouter = require('./routes/index')
@@ -31,6 +32,7 @@ app.use(session({
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(methodOverride('_method'))
 
 const mongoose = require("mongoose")
 mongoose.connect(process.env.DATABASE_URL, {
